@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import mimetypes
+from contextlib import redirect_stderr, redirect_stdout
+import importlib
+import io
 from pathlib import Path
 
 from .models import Document, Page, TextBlock
@@ -58,12 +61,7 @@ def _parse_text(path: Path, mime_type: str, *, fallback: bool = False) -> Docume
 
 
 def _parse_pdf(path: Path, mime_type: str, *, ocr: str) -> Document:
-    try:
-        import fitz  # type: ignore[import-not-found]
-    except Exception as exc:
-        raise DocpipeError(
-            "PDF parsing requires PyMuPDF. Install with: pip install 'docpipe-core[pdf]'"
-        ) from exc
+    fitz = _load_pymupdf()
 
     pages: list[Page] = []
     warnings: list[str] = []
@@ -82,12 +80,12 @@ def _parse_pdf(path: Path, mime_type: str, *, ocr: str) -> Document:
                         )
                     )
             page_text = "\n\n".join(block.text for block in blocks)
-            if not page_text and ocr in {"auto", "force"}:
+            if ocr == "force" or (not page_text and ocr == "auto"):
                 ocr_text = _ocr_pdf_page(raw_page)
                 if ocr_text:
                     page_text = ocr_text
-                    blocks.append(TextBlock(text=ocr_text, page=index, kind="ocr"))
-                else:
+                    blocks = [TextBlock(text=ocr_text, page=index, kind="ocr")]
+                elif not page_text:
                     warnings.append(f"Page {index} had no extractable text and OCR produced no text.")
             pages.append(Page(number=index, text=page_text, blocks=blocks))
 
@@ -103,11 +101,11 @@ def _parse_pdf(path: Path, mime_type: str, *, ocr: str) -> Document:
 
 def _ocr_pdf_page(page: object) -> str:
     try:
-        import fitz  # type: ignore[import-not-found]
         import pytesseract  # type: ignore[import-not-found]
         from PIL import Image  # type: ignore[import-not-found]
     except Exception:
         return ""
+    fitz = _load_pymupdf()
 
     pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
     mode = "RGBA" if pix.alpha else "RGB"
@@ -145,6 +143,20 @@ def _parse_image(path: Path, mime_type: str, *, ocr: str) -> Document:
         warnings=[] if text else ["OCR produced no text."],
         backend="pytesseract",
     )
+
+
+def _load_pymupdf():
+    try:
+        return importlib.import_module("pymupdf")
+    except Exception:
+        try:
+            output = io.StringIO()
+            with redirect_stdout(output), redirect_stderr(output):
+                return importlib.import_module("fitz")
+        except Exception as exc:
+            raise DocpipeError(
+                "PDF parsing requires PyMuPDF. Install with: pip install 'docpipe-core[pdf]'"
+            ) from exc
 
 
 def _parse_docx(path: Path, mime_type: str) -> Document:
