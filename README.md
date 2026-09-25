@@ -11,15 +11,17 @@ It is local-first by default: digital PDFs are read as text, scanned/image input
 - Ruby: `docpipe`
 
 The Python package is the engine. The Node and Ruby packages are thin wrappers around the Python CLI so all three ecosystems produce the same JSON shape.
+Set `DOCPIPE_PYTHON=/path/to/python` when the Python engine is installed in a virtualenv instead of the system `python3`.
 
 ## Features
 
 - PDF text extraction with optional PyMuPDF support
+- PDF table extraction into JSON and Markdown tables
 - OCR fallback for image files when `pytesseract` and Tesseract are installed
 - DOCX extraction when `python-docx` is installed
 - Plain text and Markdown support
 - Markdown and JSON output
-- Page numbers, text blocks, metadata, warnings, and parser backend details
+- Page numbers, text blocks, tables, metadata, warnings, and parser backend details
 - CLI, Python API, Node API, and Ruby API
 
 ## Python

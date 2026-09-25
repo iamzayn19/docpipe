@@ -24,6 +24,7 @@ class Page:
 
     def to_markdown(self) -> str:
         parts = [block.text.strip() for block in self.blocks if block.text.strip()]
+        parts.extend(_table_to_markdown(table) for table in self.tables if table)
         text = "\n\n".join(parts).strip() or self.text.strip()
         if not text:
             return ""
@@ -36,6 +37,22 @@ class Page:
             "blocks": [block.to_dict() for block in self.blocks],
             "tables": self.tables,
         }
+
+
+def _table_to_markdown(table: list[list[str]]) -> str:
+    width = max((len(row) for row in table), default=0)
+    if width == 0:
+        return ""
+    rows = [row + [""] * (width - len(row)) for row in table]
+    header = rows[0]
+    separator = ["---"] * width
+    body = rows[1:]
+    rendered = [header, separator, *body]
+    return "\n".join("| " + " | ".join(_escape_cell(cell) for cell in row) + " |" for row in rendered)
+
+
+def _escape_cell(cell: str) -> str:
+    return cell.replace("\n", " ").replace("|", "\\|").strip()
 
 
 @dataclass

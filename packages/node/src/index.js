@@ -1,8 +1,9 @@
 import { execFile } from "node:child_process";
 
 function runDocpipe(args) {
+  const python = process.env.DOCPIPE_PYTHON || "python3";
   return new Promise((resolve, reject) => {
-    execFile("python3", ["-m", "docpipe_core.cli", ...args], { maxBuffer: 100 * 1024 * 1024 }, (error, stdout, stderr) => {
+    execFile(python, ["-m", "docpipe_core.cli", ...args], { maxBuffer: 100 * 1024 * 1024 }, (error, stdout, stderr) => {
       if (error) {
         error.stderr = stderr;
         reject(error);

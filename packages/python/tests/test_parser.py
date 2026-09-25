@@ -72,3 +72,33 @@ def test_pdf_force_ocr_replaces_existing_text_layer(tmp_path, monkeypatch):
 
     assert doc.text == "clean ocr text"
     assert doc.pages[0].blocks == [parser.TextBlock(text="clean ocr text", page=1, kind="ocr")]
+
+
+def test_pdf_extracts_tables_into_json_and_markdown(tmp_path):
+    pymupdf = pytest.importorskip("pymupdf")
+    path = tmp_path / "table.pdf"
+    pdf = pymupdf.open()
+    page = pdf.new_page()
+    xs = [72, 180, 320, 430]
+    ys = [72, 108, 144, 180]
+    for x in xs:
+        page.draw_line((x, ys[0]), (x, ys[-1]))
+    for y in ys:
+        page.draw_line((xs[0], y), (xs[-1], y))
+    rows = [
+        ["Qty", "Service", "Total"],
+        ["1", "Web Design", "$500"],
+        ["2", "Hosting", "$40"],
+    ]
+    for row_index, row in enumerate(rows):
+        for column_index, cell in enumerate(row):
+            page.insert_text((xs[column_index] + 8, ys[row_index] + 22), cell)
+    pdf.save(path)
+    pdf.close()
+
+    doc = parse(path)
+
+    assert doc.pages[0].tables
+    assert ["Qty", "Service", "Total"] in doc.pages[0].tables[0]
+    assert ["1", "Web Design", "$500"] in doc.pages[0].tables[0]
+    assert "| Qty | Service | Total |" in doc.markdown
