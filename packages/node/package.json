@@ -1,0 +1,26 @@
+{
+  "name": "docpipe",
+  "version": "0.1.0",
+  "description": "Document parsing to Markdown and JSON from Node.js.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": "./src/index.js",
+  "bin": {
+    "docpipe-js": "./src/cli.js"
+  },
+  "files": ["src", "README.md", "LICENSE"],
+  "keywords": ["pdf", "ocr", "markdown", "documents", "rag"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamzayn19/docpipe.git",
+    "directory": "packages/node"
+  },
+  "bugs": {
+    "url": "https://github.com/iamzayn19/docpipe/issues"
+  },
+  "homepage": "https://github.com/iamzayn19/docpipe#readme",
+  "scripts": {
+    "test": "node --test"
+  }
+}

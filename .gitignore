@@ -1,0 +1,14 @@
+.DS_Store
+.venv/
+node_modules/
+dist/
+build/
+*.egg-info/
+coverage/
+.coverage
+__pycache__/
+*.pyc
+pkg/
+*.gem
+Gemfile.lock
+tmp/

@@ -1,0 +1,3 @@
+Docpipe extracts this text into Markdown and JSON.
+
+It keeps the API consistent across Python, Node.js, and Ruby.

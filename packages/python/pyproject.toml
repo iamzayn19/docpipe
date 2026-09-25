@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "docpipe-core"
+version = "0.1.0"
+description = "Local-first document parsing to Markdown and structured JSON."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [{ name = "Zayn" }]
+keywords = ["pdf", "ocr", "markdown", "documents", "rag", "parsing"]
+dependencies = []
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Text Processing",
+]
+
+[project.optional-dependencies]
+pdf = ["pymupdf>=1.24"]
+docx = ["python-docx>=1.1"]
+ocr = ["pillow>=10.0", "pytesseract>=0.3"]
+all = ["pymupdf>=1.24", "python-docx>=1.1", "pillow>=10.0", "pytesseract>=0.3"]
+test = ["pytest>=8.0"]
+
+[project.scripts]
+docpipe = "docpipe_core.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/iamzayn19/docpipe"
+Repository = "https://github.com/iamzayn19/docpipe"
+Issues = "https://github.com/iamzayn19/docpipe/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["docpipe_core"]
