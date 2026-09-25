@@ -7,7 +7,7 @@ It is local-first by default: digital PDFs are read as text, scanned/image input
 ## Packages
 
 - Python: `docpipe-core`
-- Node.js: `docpipe`
+- Node.js: `@iamzayn19/docpipe`
 - Ruby: `docpipe`
 
 The Python package is the engine. The Node and Ruby packages are thin wrappers around the Python CLI so all three ecosystems produce the same JSON shape.
@@ -43,11 +43,11 @@ print(doc.pages[0].text)
 ## Node.js
 
 ```bash
-npm install docpipe
+npm install @iamzayn19/docpipe
 ```
 
 ```js
-import { parse } from "docpipe";
+import { parse } from "@iamzayn19/docpipe";
 
 const doc = await parse("invoice.pdf");
 console.log(doc.markdown);
