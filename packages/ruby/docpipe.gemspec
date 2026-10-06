@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name = "docpipe"
-  spec.version = "0.1.0"
+  spec.version = "0.2.0"
   spec.summary = "Document parsing to Markdown and JSON from Ruby."
   spec.description = "Ruby wrapper for Docpipe, a local-first document parser."
   spec.authors = ["Zayn"]

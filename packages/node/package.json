@@ -1,6 +1,6 @@
 {
   "name": "@iamzayn19/docpipe",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Document parsing to Markdown and JSON from Node.js.",
   "type": "module",
   "main": "./src/index.js",

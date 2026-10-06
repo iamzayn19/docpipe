@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "docpipe-core"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local-first document parsing to Markdown and structured JSON."
 readme = "README.md"
 requires-python = ">=3.9"
