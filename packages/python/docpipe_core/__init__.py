@@ -1,4 +1,4 @@
-from .models import Document, Page, TextBlock
+from .models import Cell, Document, Page, TableBlock, TextBlock
 from .parser import parse
 
-__all__ = ["Document", "Page", "TextBlock", "parse"]
+__all__ = ["Cell", "Document", "Page", "TableBlock", "TextBlock", "parse"]
