@@ -25,5 +25,10 @@ module Docpipe
     def backend
       data.fetch("backend")
     end
+
+    # Coordinate contract for bounding boxes ([x0, y0, x1, y1]); nil when no backend produced boxes.
+    def coordinates
+      data["coordinates"]
+    end
   end
 end

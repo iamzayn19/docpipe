@@ -16,6 +16,22 @@ class DocpipeTest < Minitest::Test
     assert_equal "test", doc.backend
   end
 
+  def test_document_exposes_coordinates_and_provenance
+    coordinates = { "backend" => "pymupdf", "origin" => "top-left", "units" => "pt" }
+    cell = { "text" => "Qty", "page" => 1, "bbox" => [200.0, 100.0, 300.0, 120.0] }
+    doc = Docpipe::Document.new(
+      "markdown" => "",
+      "text" => "",
+      "pages" => [{ "number" => 1, "elements" => [{ "type" => "table", "rows" => [[cell]] }] }],
+      "metadata" => {},
+      "backend" => "pymupdf",
+      "coordinates" => coordinates
+    )
+
+    assert_equal coordinates, doc.coordinates
+    assert_equal [200.0, 100.0, 300.0, 120.0], doc.pages.first["elements"].first["rows"].first.first["bbox"]
+  end
+
   def test_python_executable_override
     Dir.mktmpdir("docpipe-ruby-") do |dir|
       python = File.join(dir, "python")
